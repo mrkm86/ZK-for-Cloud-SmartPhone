@@ -42,7 +42,9 @@
     "phonegap-plugin-barcodescanner": "^6.0.8",
     "rxjs": "5.0.0-beta.12",
     "sw-toolbox": "3.4.0",
-    "zone.js": "0.6.26"
+    "zone.js": "0.6.26",
+    "cryptiles": ">=4.1.2",
+    "hoek": ">=4.2.1"
   },
   "devDependencies": {
     "@ionic/app-scripts": "^3.2.0",
