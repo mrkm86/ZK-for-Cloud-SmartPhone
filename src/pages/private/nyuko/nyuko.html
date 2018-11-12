@@ -1,0 +1,143 @@
+<!--タイトル-->
+<ion-header>
+    <!--タイトルの色-->
+    <ion-navbar color="NYUKOSEL">
+        <ion-title>
+            入庫処理
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <ion-list>
+
+        <!--棚番-->
+        <ion-grid>
+            <ion-row>
+                <!--テキストボックス-->
+                <ion-item>
+                    <ion-label stacked>棚番</ion-label>
+                    <!--20180912 ANHLD EDIT START-->
+                    <!--<ion-input name="txtTanaban"
+            type="text"
+            maxlength="32"
+            [(ngModel)]="txtTanaban"
+            (focus)="txtTanaban_GotFocus()"></ion-input>-->
+
+                    <ion-input #txtTanaban
+                               name="txtTanaban"
+                               type="text"
+                               maxlength="32"
+                               (focus)="txtTanaban_GotFocus()"
+                               (blur)="txtTanaban_LostFocus()"></ion-input>
+                    <!--20180912 ANHLD EDIT END-->
+                </ion-item>
+                <!--スキャンボタン-->
+                <ion-item no-lines class="item-button-scan">
+                    <ion-label stacked></ion-label>
+                    <button ion-button icon-only
+                            item-content class="button-scan"
+                            name="btnTanaban"
+                            (click)="Scanner_OnScanned($event)">
+                        <ion-icon name="md-qr-scanner"></ion-icon>
+                    </button>
+                </ion-item>
+            </ion-row>
+            <!--20180926 ANHLD ADD START-->
+            <ion-row>
+                <ion-item [hidden]="isTanaHidden">
+                    <ion-label stacked>{{lblTanamei}}</ion-label>
+                </ion-item>
+            </ion-row>
+            <!--20180926 ANHLD ADD END-->
+        </ion-grid>
+
+        <!--品番-->
+        <ion-grid>
+            <ion-row>
+                <!--テキストボックス-->
+                <ion-item>
+                    <ion-label stacked>品番</ion-label>
+                    <!--20180912 ANHLD EDIT START-->
+                    <!--<ion-input name="txtHinban"
+            type="text"
+            maxlength="7089"
+            [(ngModel)]="txtHinban"
+            (focus)="txtHinban_GotFocus()"></ion-input>-->
+
+                    <ion-input #txtHinban
+                               name="txtHinban"
+                               type="text"
+                               maxlength="7089"
+                               (focus)="txtHinban_GotFocus()"
+                               (blur)="txtHinban_LostFocus()"></ion-input>
+                    <!--20180912 ANHLD EDIT END-->
+                </ion-item>
+                <!--スキャンボタン-->
+                <ion-item no-lines class="item-button-scan">
+                    <ion-label stacked></ion-label>
+                    <button ion-button icon-only
+                            item-content class="button-scan"
+                            name="btnHinban"
+                            (click)="Scanner_OnScanned($event)">
+                        <ion-icon name="md-qr-scanner"></ion-icon>
+                    </button>
+                </ion-item>
+            </ion-row>
+            <!--20180926 ANHLD ADD START-->
+            <ion-row>
+                <ion-item [hidden]="isHinmeiHidden">
+                    <ion-label name="lblHinmei" stacked>{{lblHinmei}}</ion-label>
+                </ion-item>
+            </ion-row>
+            <!--20180926 ANHLD ADD END-->
+        </ion-grid>
+
+        <!--数量-->
+        <ion-grid>
+            <ion-row>
+                <!--テキストボックス-->
+                <ion-item>
+                    <ion-label stacked>数量</ion-label>
+                    <!--20180912 ANHLD EDIT START-->
+                    <!--<ion-input name="txtSuryo"
+                               type="number"
+                               maxlength="10"
+                               [(ngModel)]="txtSuryo"
+                               (focus)="txtSuryo_GotFocus()">
+                    </ion-input>-->
+
+                    <ion-input #txtSuryo
+                               name="txtSuryo"
+                               type="number"
+                               maxlength="10"
+                               (focus)="txtSuryo_GotFocus()">
+                    </ion-input>
+                    <!--20180912 ANHLD EDIT END-->
+                </ion-item>
+                <!--スキャンボタン-->
+                <ion-item no-lines class="item-button-scan">
+                    <ion-label stacked></ion-label>
+                    <!--スキャン不要-->
+                    <!--<button ion-button icon-only
+                        item-content class="button-scan"
+                        (click)="Scanner_OnScanned('txtHinban')">
+                        <ion-icon name="md-qr-scanner"></ion-icon>
+                    </button>-->
+                </ion-item>
+            </ion-row>
+        </ion-grid>
+
+        <!--確定ボタン-->
+        <ion-item>
+            <button ion-button full large block
+                    #cmdRegist
+                    class="button-Regist"
+                    (click)="cmdRegist_Click()">
+                確定する
+            </button>
+        </ion-item>
+
+    </ion-list>
+
+</ion-content>
