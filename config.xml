@@ -104,4 +104,5 @@
     </plugin>
     <plugin name="cordova-sqlite-storage" spec="2.5.1" />
     <engine name="android" spec="5.2.2" />
+    <plugin name="ionic-plugin-keyboard" spec="2.2.1" />
 </widget>
