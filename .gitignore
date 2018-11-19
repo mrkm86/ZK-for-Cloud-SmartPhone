@@ -1,4 +1,5 @@
 .DS_Store
+.vscode
 bin
 npm-debug.log
 node_modules
