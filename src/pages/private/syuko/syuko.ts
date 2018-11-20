@@ -31,7 +31,7 @@ export class SyukoPage {
         };
 
     //タッチパネル対策で、画面遷移IDを設定する
-    F_02_OUT_MENU_ID =
+    MENU_ID =
         {
             "input_flg_BackToMenu": 0,
             "input_flg_Tanaban": 10,
@@ -77,17 +77,17 @@ export class SyukoPage {
     onClick_BackButton() {
         switch (this.GLOBAL_INPUT_FLG.Global_inputflg) {
             //棚番入力
-            case this.F_02_OUT_MENU_ID.input_flg_Tanaban:
+            case this.MENU_ID.input_flg_Tanaban:
                 this.txtTanaban.value = "";
                 break;
 
             //品番入力
-            case this.F_02_OUT_MENU_ID.input_flg_Hinban:
+            case this.MENU_ID.input_flg_Hinban:
                 this.txtHinban.value = "";
                 break;
 
             //数量入力
-            case this.F_02_OUT_MENU_ID.input_flg_Suryo:
+            case this.MENU_ID.input_flg_Suryo:
                 this.txtSuryo.value = "";
                 break;
 
@@ -96,7 +96,7 @@ export class SyukoPage {
         }
         //前項目に戻る
         this.GLOBAL_INPUT_FLG.Global_inputflg = this.GLOBAL_INPUT_FLG.Global_prevflg;
-        this.Out_Menu();
+        this.Menu();
     }
 
     //********************************************************************************
@@ -113,7 +113,7 @@ export class SyukoPage {
         this.isHinmeiHidden = true;
 
         //初期画面へ移動 ----------------------------------------------------------------
-        this.GLOBAL_INPUT_FLG.Global_inputflg = this.F_02_OUT_MENU_ID.input_flg_Tanaban;
+        this.GLOBAL_INPUT_FLG.Global_inputflg = this.MENU_ID.input_flg_Tanaban;
 
         setTimeout(() => {
             Keyboard.show() // for android
@@ -132,13 +132,13 @@ export class SyukoPage {
         //どのスキャンボタンを押されたかによって、処理を分ける
         switch (ctrl) {
             case "btnTanaban":
-                this.GLOBAL_INPUT_FLG.Global_inputflg = this.F_02_OUT_MENU_ID.input_flg_Tanaban;
+                this.GLOBAL_INPUT_FLG.Global_inputflg = this.MENU_ID.input_flg_Tanaban;
                 break;
             case "btnHinban":
-                this.GLOBAL_INPUT_FLG.Global_inputflg = this.F_02_OUT_MENU_ID.input_flg_Hinban;
+                this.GLOBAL_INPUT_FLG.Global_inputflg = this.MENU_ID.input_flg_Hinban;
                 break;
         }
-        this.Out_Menu();
+        this.Menu();
 
         //スキャン開始
         this.barcodeScanner.scan().then(data => {
@@ -147,14 +147,14 @@ export class SyukoPage {
 
             switch (this.GLOBAL_INPUT_FLG.Global_inputflg) {
                 //棚番入力
-                case this.F_02_OUT_MENU_ID.input_flg_Tanaban:
+                case this.MENU_ID.input_flg_Tanaban:
                     this.txtTanaban.value = data.text;
 
                     this.txtTanaban_Scanned();
                     break;
 
                 //品番入力
-                case this.F_02_OUT_MENU_ID.input_flg_Hinban:
+                case this.MENU_ID.input_flg_Hinban:
                     this.txtHinban.value = data.text;
                     this.txtHinban_Scanned();
                     break;
@@ -171,29 +171,30 @@ export class SyukoPage {
     //********************************************************************************
     //メイン画面
     //********************************************************************************
-    Out_Menu() {
+    Menu() {
 
-        switch (this.GLOBAL_INPUT_FLG.Global_inputflg) {
-            case this.F_02_OUT_MENU_ID.input_flg_BackToMenu:
+        switch (this.GLOBAL_INPUT_FLG.Global_inputflg) 
+        {
+            case this.MENU_ID.input_flg_BackToMenu:
                 break;
 
             //棚番入力
-            case this.F_02_OUT_MENU_ID.input_flg_Tanaban:
-                this.In_Tanaban();
+            case this.MENU_ID.input_flg_Tanaban:
+                this.Tanaban();
                 break;
 
             //品番入力
-            case this.F_02_OUT_MENU_ID.input_flg_Hinban:
-                this.In_Hinban();
+            case this.MENU_ID.input_flg_Hinban:
+                this.Hinban();
                 break;
 
             //数量入力
-            case this.F_02_OUT_MENU_ID.input_flg_Suryo:
-                this.In_Suryo();
+            case this.MENU_ID.input_flg_Suryo:
+                this.Suryo();
                 break;
 
             //ログ書き込み
-            case this.F_02_OUT_MENU_ID.input_flg_Write:
+            case this.MENU_ID.input_flg_Write:
                 break;
 
             default:
@@ -204,16 +205,16 @@ export class SyukoPage {
     //********************************************************************************
     //棚番入力
     //********************************************************************************
-    In_Tanaban() {
+    Tanaban() {
         IsDispOperation.isSetFocus(this.txtTanaban);
     }
     txtTanaban_GotFocus() {
         Global.CurrentControl = this.txtTanaban;
 
         //この処理と違うテキストボックスからタッチされた場合、行き先を再設定【重要】
-        this.GLOBAL_INPUT_FLG.Global_inputflg = this.F_02_OUT_MENU_ID.input_flg_Tanaban;
-        this.GLOBAL_INPUT_FLG.Global_prevflg = this.F_02_OUT_MENU_ID.input_flg_BackToMenu;
-        this.GLOBAL_INPUT_FLG.Global_nextflg = this.F_02_OUT_MENU_ID.input_flg_Hinban;
+        this.GLOBAL_INPUT_FLG.Global_inputflg = this.MENU_ID.input_flg_Tanaban;
+        this.GLOBAL_INPUT_FLG.Global_prevflg = this.MENU_ID.input_flg_BackToMenu;
+        this.GLOBAL_INPUT_FLG.Global_nextflg = this.MENU_ID.input_flg_Hinban;
     }
     async txtTanaban_LostFocus() {
         var itemJson = null;
@@ -223,7 +224,7 @@ export class SyukoPage {
         IsDispOperation.IsWaitMessageBox(this.loadingCtrl, "データ送信中", true);
 
         //Trans data
-        itemJson = await this.In_TransTanaban();
+        itemJson = await this.TransTanaban();
 
         if (itemJson == null || itemJson.length == 0) {
             IsDispOperation.IsWaitMessageBox(this.loadingCtrl, "データ送信中", false);
@@ -249,7 +250,7 @@ export class SyukoPage {
         }
 
         this.GLOBAL_INPUT_FLG.Global_inputflg = this.GLOBAL_INPUT_FLG.Global_nextflg;
-        this.Out_Menu();
+        this.Menu();
     }
     //*********************************************************
     //* 入力チェック
@@ -271,16 +272,16 @@ export class SyukoPage {
     //********************************************************************************
     //品番入力
     //********************************************************************************
-    In_Hinban() {
+    Hinban() {
         IsDispOperation.isSetFocus(this.txtHinban);
     }
     txtHinban_GotFocus() {
         Global.CurrentControl = this.txtHinban;
 
         //この処理と違うテキストボックスからタッチされた場合、行き先を再設定【重要】
-        this.GLOBAL_INPUT_FLG.Global_inputflg = this.F_02_OUT_MENU_ID.input_flg_Hinban;
-        this.GLOBAL_INPUT_FLG.Global_prevflg = this.F_02_OUT_MENU_ID.input_flg_Tanaban;
-        this.GLOBAL_INPUT_FLG.Global_nextflg = this.F_02_OUT_MENU_ID.input_flg_Suryo;
+        this.GLOBAL_INPUT_FLG.Global_inputflg = this.MENU_ID.input_flg_Hinban;
+        this.GLOBAL_INPUT_FLG.Global_prevflg = this.MENU_ID.input_flg_Tanaban;
+        this.GLOBAL_INPUT_FLG.Global_nextflg = this.MENU_ID.input_flg_Suryo;
     }
     async txtHinban_LostFocus() {
         var itemJson = null;
@@ -289,7 +290,7 @@ export class SyukoPage {
         IsDispOperation.IsWaitMessageBox(this.loadingCtrl, "データ送信中", "OK", true);
 
         //Trans data
-        itemJson = await this.In_TransHinban();
+        itemJson = await this.TransHinban();
 
         if (itemJson == null || itemJson.length == 0) {
             console.log('111');
@@ -316,7 +317,7 @@ export class SyukoPage {
         }
 
         this.GLOBAL_INPUT_FLG.Global_inputflg = this.GLOBAL_INPUT_FLG.Global_nextflg;
-        this.Out_Menu();
+        this.Menu();
     }
     //*********************************************************
     //* 入力チェック
@@ -338,16 +339,16 @@ export class SyukoPage {
     //********************************************************************************
     //数量入力
     //********************************************************************************
-    In_Suryo() {
+    Suryo() {
         IsDispOperation.isSetFocus(this.txtSuryo);
     }
     txtSuryo_GotFocus() {
         Global.CurrentControl = this.txtSuryo;
 
         //この処理と違うテキストボックスからタッチされた場合、行き先を再設定【重要】
-        this.GLOBAL_INPUT_FLG.Global_inputflg = this.F_02_OUT_MENU_ID.input_flg_Suryo;
-        this.GLOBAL_INPUT_FLG.Global_prevflg = this.F_02_OUT_MENU_ID.input_flg_Hinban;
-        this.GLOBAL_INPUT_FLG.Global_nextflg = this.F_02_OUT_MENU_ID.input_flg_Write;
+        this.GLOBAL_INPUT_FLG.Global_inputflg = this.MENU_ID.input_flg_Suryo;
+        this.GLOBAL_INPUT_FLG.Global_prevflg = this.MENU_ID.input_flg_Hinban;
+        this.GLOBAL_INPUT_FLG.Global_nextflg = this.MENU_ID.input_flg_Write;
 
         //キーボード表示
         Keyboard.show(); // for android
@@ -369,7 +370,7 @@ export class SyukoPage {
         }
 
         this.GLOBAL_INPUT_FLG.Global_inputflg = this.GLOBAL_INPUT_FLG.Global_nextflg;
-        this.Out_Menu();
+        this.Menu();
     }
     //*********************************************************
     //* 入力チェック
@@ -397,7 +398,7 @@ export class SyukoPage {
     //********************************************************************************
     //データ確定
     //********************************************************************************
-    async In_WriteLog() {
+    async WriteLog() {
         //通信
         var ret = await this.Write_Trans();
 
@@ -415,7 +416,7 @@ export class SyukoPage {
         this.isHinmeiHidden = true;
 
         this.GLOBAL_INPUT_FLG.Global_inputflg = this.GLOBAL_INPUT_FLG.Global_nextflg;
-        this.Out_Menu();
+        this.Menu();
     }
 
     //********************************************************************************
@@ -451,22 +452,21 @@ export class SyukoPage {
         //数量 -------------------------------------------------------------
 
         //この処理と違うテキストボックスからタッチされた場合、行き先を再設定【重要】
-        this.GLOBAL_INPUT_FLG.Global_inputflg = this.F_02_OUT_MENU_ID.input_flg_Write;
-        this.GLOBAL_INPUT_FLG.Global_prevflg = this.F_02_OUT_MENU_ID.input_flg_Suryo;
-        this.GLOBAL_INPUT_FLG.Global_nextflg = this.F_02_OUT_MENU_ID.input_flg_Hinban;
+        this.GLOBAL_INPUT_FLG.Global_inputflg = this.MENU_ID.input_flg_Write;
+        this.GLOBAL_INPUT_FLG.Global_prevflg = this.MENU_ID.input_flg_Suryo;
+        this.GLOBAL_INPUT_FLG.Global_nextflg = this.MENU_ID.input_flg_Hinban;
 
         //確定
-        this.In_WriteLog();
+        this.WriteLog();
     }
 
     //********************************************************************************
     //棚番要求
     //********************************************************************************
-    async In_TransTanaban(): Promise<any> {
+    async TransTanaban(): Promise<any> {
         var apiUri = null;
         var headersReq = null;
         var options = null;
-        var strLocationName = "";
 
         //apiUri = 'https://hsccloud-a522913.db.us2.oraclecloudapps.com/apex/hscdevelop/zaiko/api';
         apiUri = await IsIniOperation.IsIniRead(Global.T_SETINI, 'API_URL');
@@ -501,11 +501,10 @@ export class SyukoPage {
     //********************************************************************************
     //品番要求
     //********************************************************************************
-    async In_TransHinban(): Promise<any> {
+    async TransHinban(): Promise<any> {
         var apiUri = null;
         var headersReq = null;
         var options = null;
-        var strLocationName = "";
 
         //apiUri = 'https://hsccloud-a522913.db.us2.oraclecloudapps.com/apex/hscdevelop/zaiko/api';
         apiUri = await IsIniOperation.IsIniRead(Global.T_SETINI, 'API_URL');
