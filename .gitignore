@@ -1,8 +1,10 @@
 .DS_Store
+.sourcemaps
+.vs
 .vscode
-bin
-npm-debug.log
 node_modules
 platforms
 plugins
+bin
+npm-debug.log
 www
