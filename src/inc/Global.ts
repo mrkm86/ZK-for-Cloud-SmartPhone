@@ -5,7 +5,7 @@ export class Global {
     static g_mode: string = "";
     static CurrentControl = null;
 
-    //æ“¾î•ñŠi”[•Ï”
+    //å–å¾—æƒ…å ±æ ¼ç´å¤‰æ•°
     static GDATA = 
         {
             "Data": [],

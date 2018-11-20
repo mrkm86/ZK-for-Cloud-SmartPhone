@@ -13,11 +13,12 @@ import { AboutPage } from '../pages/public/about/about';
 
 //個別ページ ---------------------------------------------------------
 import { NyukoPage } from '../pages/private/nyuko/nyuko';
+import { SyukoPage } from '../pages/private/syuko/syuko';
 import { SearchPage } from '../pages/private/search/search';
 import { SearchDetailPage } from '../pages/private/search_detail/search_detail'; //20181016 ANHLD ADD
 
 @NgModule({
-  declarations: [
+  declarations: [ //ページを追加したら、ここにも追加することを忘れない
     MyApp,
     TabsPage,
     HomePage,
@@ -26,13 +27,14 @@ import { SearchDetailPage } from '../pages/private/search_detail/search_detail';
     SettingPage,
     AboutPage,
     NyukoPage,
+    SyukoPage,
     SearchDetailPage
   ],
   imports: [
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
-  entryComponents: [
+  entryComponents: [  //ページを追加したら、ここにも追加することを忘れない
     MyApp,
     TabsPage,
     HomePage,
@@ -41,6 +43,7 @@ import { SearchDetailPage } from '../pages/private/search_detail/search_detail';
     SettingPage,
     AboutPage,
     NyukoPage,
+    SyukoPage,
     SearchDetailPage
   ],
   providers: [

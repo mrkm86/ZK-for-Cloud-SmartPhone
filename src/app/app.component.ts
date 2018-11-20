@@ -31,7 +31,7 @@ export class MyApp {
             androidPermissions.requestPermissions([androidPermissions.PERMISSION.CAMERA, androidPermissions.PERMISSION.GET_ACCOUNTS]);
 
             //Init database
-            IsIniOperation.CreateIniFile();    //20180918 ANHLD ADD
+            IsIniOperation.CreateIniFile();
 
             // used for an example of ngFor and navigation
             this.pages = [
