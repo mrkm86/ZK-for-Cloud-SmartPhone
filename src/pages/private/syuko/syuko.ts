@@ -10,6 +10,7 @@ import { Http, Headers, RequestOptions, Jsonp } from '@angular/http';
 import { IsDispOperation } from '../../../inc/IsDispOperation';
 import { IsIniOperation } from '../../../inc/IsIniOperation';
 import { Global } from '../../../inc/Global';
+import { IsStrOperation } from '../../../inc/IsStrOperation';
 
 @Component({
     selector: 'page-syuko',
@@ -39,15 +40,10 @@ export class SyukoPage {
             "input_flg_Write": 90
         };
 
-    //変数用オブジェクト
-    //txtTanaban: string;
-    //txtHinban: string;
-    //txtSuryo: string;
-
     //Focus用オブジェクト
-    @ViewChild('txtTanaban') txtTanabanInput: TextInput;    //20180912 ANHLD EDIT
-    @ViewChild('txtHinban') txtHinbanInput: TextInput;      //20180912 ANHLD EDIT
-    @ViewChild('txtSuryo') txtSuryoInput: TextInput;        //20180912 ANHLD EDIT
+    @ViewChild('inputTanaban') txtTanaban: TextInput;
+    @ViewChild('inputHinban') txtHinban: TextInput;
+    @ViewChild('inputSuryo') txtSuryo: TextInput;
 
     lblTanamei: string;
     lblHinmei: string;
@@ -82,26 +78,17 @@ export class SyukoPage {
         switch (this.GLOBAL_INPUT_FLG.Global_inputflg) {
             //棚番入力
             case this.F_02_OUT_MENU_ID.input_flg_Tanaban:
-                //20180912 ANHLD EDIT START
-                //this.txtTanaban = "";
-                this.txtTanabanInput.value = "";
-                //20180912 ANHLD EDIT END
+                this.txtTanaban.value = "";
                 break;
 
             //品番入力
             case this.F_02_OUT_MENU_ID.input_flg_Hinban:
-                //20180912 ANHLD EDIT START
-                //this.txtHinban = "";
-                this.txtHinbanInput.value = "";
-                //20180912 ANHLD EDIT END
+                this.txtHinban.value = "";
                 break;
 
             //数量入力
             case this.F_02_OUT_MENU_ID.input_flg_Suryo:
-                //20180912 ANHLD EDIT START
-                //this.txtSuryo = "";
-                this.txtSuryoInput.value = "";
-                //20180912 ANHLD EDIT END
+                this.txtSuryo.value = "";
                 break;
 
             default:
@@ -109,38 +96,28 @@ export class SyukoPage {
         }
         //前項目に戻る
         this.GLOBAL_INPUT_FLG.Global_inputflg = this.GLOBAL_INPUT_FLG.Global_prevflg;
-        this.In_Menu();
+        this.Out_Menu();
     }
 
     //********************************************************************************
     //ページ読み込み時
     //********************************************************************************
-    //ionViewDidEnter()
-    //ionViewDidLoad()
     ionViewWillEnter() {
+
         //初期化
-        //20180912 ANHLD EDIT START
-        //this.txtTanaban = "";
-        //this.txtHinban = "";
-        //this.txtSuryo = "";
+        this.txtTanaban.value = "";
+        this.txtHinban.value = "";
+        this.txtSuryo.value = "";
 
-        this.txtTanabanInput.value = "";
-        this.txtHinbanInput.value = "";
-        this.txtSuryoInput.value = "";
-        //20180912 ANHLD EDIT END
-
-        //20180926 ANHLD ADD START
         this.isTanaHidden = true;
         this.isHinmeiHidden = true;
-        //20180926 ANHLD ADD END
 
         //初期画面へ移動 ----------------------------------------------------------------
         this.GLOBAL_INPUT_FLG.Global_inputflg = this.F_02_OUT_MENU_ID.input_flg_Tanaban;
-        //this.In_Menu();
 
         setTimeout(() => {
             Keyboard.show() // for android
-            this.txtTanabanInput.setFocus();
+            this.txtTanaban.setFocus();
         }, 1000);
 
         //初期画面へ移動 ----------------------------------------------------------------
@@ -150,10 +127,7 @@ export class SyukoPage {
     //スキャナーイベント
     //********************************************************************************
     Scanner_OnScanned(event: any) {
-        //20181001 ANHLD EDIT START
-        //var ctrl = event.target.parentElement.getAttribute("name");
         var ctrl = event.currentTarget.getAttribute("name");
-        //20181001 ANHLD EDIT END
 
         //どのスキャンボタンを押されたかによって、処理を分ける
         switch (ctrl) {
@@ -164,7 +138,7 @@ export class SyukoPage {
                 this.GLOBAL_INPUT_FLG.Global_inputflg = this.F_02_OUT_MENU_ID.input_flg_Hinban;
                 break;
         }
-        this.In_Menu();
+        this.Out_Menu();
 
         //スキャン開始
         this.barcodeScanner.scan().then(data => {
@@ -174,21 +148,15 @@ export class SyukoPage {
             switch (this.GLOBAL_INPUT_FLG.Global_inputflg) {
                 //棚番入力
                 case this.F_02_OUT_MENU_ID.input_flg_Tanaban:
-                    //20180912 ANHLD EDIT START
-                    //this.txtTanaban = "";
-                    this.txtTanabanInput.value = data.text;
-                    //20180912 ANHLD EDIT END
+                    this.txtTanaban.value = data.text;
 
-                    this.In_txtTanaban_Scanned();
+                    this.txtTanaban_Scanned();
                     break;
 
                 //品番入力
                 case this.F_02_OUT_MENU_ID.input_flg_Hinban:
-                    //20180912 ANHLD EDIT START
-                    //this.txttxtHinban = "";
-                    this.txtHinbanInput.value = data.text;
-                    //20180912 ANHLD EDIT END
-                    this.In_txtHinban_Scanned();
+                    this.txtHinban.value = data.text;
+                    this.txtHinban_Scanned();
                     break;
 
                 default:
@@ -203,7 +171,7 @@ export class SyukoPage {
     //********************************************************************************
     //メイン画面
     //********************************************************************************
-    In_Menu() {
+    Out_Menu() {
 
         switch (this.GLOBAL_INPUT_FLG.Global_inputflg) {
             case this.F_02_OUT_MENU_ID.input_flg_BackToMenu:
@@ -237,24 +205,20 @@ export class SyukoPage {
     //棚番入力
     //********************************************************************************
     In_Tanaban() {
-        //20180926 ANHLD EDIT START
-        //this.txtTanabanInput.setFocus();
-        IsDispOperation.isSetFocus(this.txtTanabanInput);
-        //20180926 ANHLD EDIT END
+        IsDispOperation.isSetFocus(this.txtTanaban);
     }
     txtTanaban_GotFocus() {
-        Global.CurrentControl = this.txtTanabanInput; //20180926 ANHLD ADD
+        Global.CurrentControl = this.txtTanaban;
 
         //この処理と違うテキストボックスからタッチされた場合、行き先を再設定【重要】
         this.GLOBAL_INPUT_FLG.Global_inputflg = this.F_02_OUT_MENU_ID.input_flg_Tanaban;
         this.GLOBAL_INPUT_FLG.Global_prevflg = this.F_02_OUT_MENU_ID.input_flg_BackToMenu;
         this.GLOBAL_INPUT_FLG.Global_nextflg = this.F_02_OUT_MENU_ID.input_flg_Hinban;
     }
-    //20180926 ANHLD ADD START
     async txtTanaban_LostFocus() {
         var itemJson = null;
 
-        if (this.txtTanabanInput.value.length == 0 ) return;
+        if (this.txtTanaban.value.length == 0 ) return;
 
         IsDispOperation.IsWaitMessageBox(this.loadingCtrl, "データ送信中", true);
 
@@ -264,8 +228,8 @@ export class SyukoPage {
         if (itemJson == null || itemJson.length == 0) {
             IsDispOperation.IsWaitMessageBox(this.loadingCtrl, "データ送信中", false);
             await IsDispOperation.IsMessageBox(this.alertCtrl, "該当しない棚番です", "エラー", "OK", "");
-            await IsDispOperation.isSetFocus(this.txtTanabanInput);
-            this.txtTanabanInput.value = "";
+            await IsDispOperation.isSetFocus(this.txtTanaban);
+            this.txtTanaban.value = "";
             return;
         }
 
@@ -274,41 +238,30 @@ export class SyukoPage {
         this.lblTanamei = itemJson[0].t_location_name;       
         this.isTanaHidden = false;
     }
-    //20180926 ANHLD ADD END
     //*********************************************************
     //* バーコードスキャン後
     //*********************************************************
-    In_txtTanaban_Scanned() {
+    txtTanaban_Scanned() {
         //入力チェック
-        if (this.In_txtTanaban_InputCheck() == false) {
-            //20180912 ANHLD EDIT START
-            //this.txtTanaban = "";
-            this.txtTanabanInput.value = "";
-            //20180912 ANHLD EDIT END
+        if (this.txtTanaban_InputCheck() == false) {
+            this.txtTanaban.value = "";
             return;
         }
 
         this.GLOBAL_INPUT_FLG.Global_inputflg = this.GLOBAL_INPUT_FLG.Global_nextflg;
-        this.In_Menu();
+        this.Out_Menu();
     }
     //*********************************************************
     //* 入力チェック
     //*********************************************************
-    In_txtTanaban_InputCheck() {
+    txtTanaban_InputCheck() {
         var ret = false;
 
         //桁数チェック
-        //20180912 ANHLD EDIT START
-        //if (this.txtTanaban.length == 0 || this.txtTanaban.length > 32) {
-        //    //NG
-        //    return ret;
-        //}
-
-        if (this.txtTanabanInput.value.length == 0 || this.txtTanabanInput.value.length > 32) {
+        if (this.txtTanaban.value.length == 0 || this.txtTanaban.value.length > 32) {
             //NG
             return ret;
         }
-        //20180912 ANHLD EDIT eND
 
         //OK
         ret = true;
@@ -319,24 +272,20 @@ export class SyukoPage {
     //品番入力
     //********************************************************************************
     In_Hinban() {
-        //20180926 ANHLD EDIT START
-        //this.txtHinbanInput.setFocus();
-        IsDispOperation.isSetFocus(this.txtHinbanInput);
-        //20180926 ANHLD EDIT END
+        IsDispOperation.isSetFocus(this.txtHinban);
     }
     txtHinban_GotFocus() {
-        Global.CurrentControl = this.txtHinbanInput; //20180926 ANHLD ADD
+        Global.CurrentControl = this.txtHinban;
 
         //この処理と違うテキストボックスからタッチされた場合、行き先を再設定【重要】
         this.GLOBAL_INPUT_FLG.Global_inputflg = this.F_02_OUT_MENU_ID.input_flg_Hinban;
         this.GLOBAL_INPUT_FLG.Global_prevflg = this.F_02_OUT_MENU_ID.input_flg_Tanaban;
         this.GLOBAL_INPUT_FLG.Global_nextflg = this.F_02_OUT_MENU_ID.input_flg_Suryo;
     }
-    //20180926 ANHLD ADD START
     async txtHinban_LostFocus() {
         var itemJson = null;
 
-        if (this.txtHinbanInput.value.length == 0) return;
+        if (this.txtHinban.value.length == 0) return;
         IsDispOperation.IsWaitMessageBox(this.loadingCtrl, "データ送信中", "OK", true);
 
         //Trans data
@@ -346,8 +295,8 @@ export class SyukoPage {
             console.log('111');
             IsDispOperation.IsWaitMessageBox(this.loadingCtrl, "データ送信中", false);
             await IsDispOperation.IsMessageBox(this.alertCtrl, "該当しない品番です", "エラー", "OK", "");
-            await IsDispOperation.isSetFocus(this.txtHinbanInput);
-            this.txtHinbanInput.value = "";
+            await IsDispOperation.isSetFocus(this.txtHinban);
+            this.txtHinban.value = "";
             return;
         }
 
@@ -356,41 +305,30 @@ export class SyukoPage {
         this.lblHinmei = itemJson[0].t_field2;
         this.isHinmeiHidden = false;
     }
-    //20180926 ANHLD ADD END
     //*********************************************************
     //* バーコードスキャン後
     //*********************************************************
-    In_txtHinban_Scanned() {
+    txtHinban_Scanned() {
         //入力チェック
-        if (this.In_txtHinban_InputCheck() == false) {
-            //20180912 ANHLD EDIT START
-            //this.txtHinban = "";
-            this.txtHinbanInput.value = "";
-            //20180912 ANHLD EDIT END
+        if (this.txtHinban_InputCheck() == false) {
+            this.txtHinban.value = "";
             return;
         }
 
         this.GLOBAL_INPUT_FLG.Global_inputflg = this.GLOBAL_INPUT_FLG.Global_nextflg;
-        this.In_Menu();
+        this.Out_Menu();
     }
     //*********************************************************
     //* 入力チェック
     //*********************************************************
-    In_txtHinban_InputCheck() {
+    txtHinban_InputCheck() {
         var ret = false;
 
         //桁数チェック
-        //20180912 ANHLD EDIT START
-        //if (this.txtHinban.length == 0 || this.txtHinban.length > 7089) {
-        //    //NG
-        //    return ret;
-        //}
-
-        if (this.txtHinbanInput.value.length == 0 || this.txtHinbanInput.value.length > 7089) {
+        if (this.txtHinban.value.length == 0 || this.txtHinban.value.length > 7089) {
             //NG
             return ret;
         }
-        //20180912 ANHLD EDIT END
 
         //OK
         ret = true;
@@ -401,13 +339,10 @@ export class SyukoPage {
     //数量入力
     //********************************************************************************
     In_Suryo() {
-        //20180926 ANHLD EDIT START
-        //this.txtSuryoInput.setFocus();
-        IsDispOperation.isSetFocus(this.txtSuryoInput);
-        //20180926 ANHLD EDIT END
+        IsDispOperation.isSetFocus(this.txtSuryo);
     }
     txtSuryo_GotFocus() {
-        Global.CurrentControl = this.txtSuryoInput; //20180926 ANHLD ADD
+        Global.CurrentControl = this.txtSuryo;
 
         //この処理と違うテキストボックスからタッチされた場合、行き先を再設定【重要】
         this.GLOBAL_INPUT_FLG.Global_inputflg = this.F_02_OUT_MENU_ID.input_flg_Suryo;
@@ -416,58 +351,37 @@ export class SyukoPage {
 
         //キーボード表示
         Keyboard.show(); // for android
-        //setTimeout(() => {
-        //    Keyboard.show() // for android
-        //    this.txtSuryoInput.setFocus();
-        //}, 150);
     }
     //*********************************************************
     //* バーコードスキャン後
     //*********************************************************
-    In_txtSuryo_Scanned() {
+    txtSuryo_Scanned() {
         //入力チェック
-        if (this.In_txtSuryo_InputCheck() == false) {
-            //20180912 ANHLD EDIT START
-            //this.txtSuryo = "";
-            this.txtSuryoInput.value = "";
-            //20180912 ANHLD EDIT END
+        if (this.txtSuryo_InputCheck() == false) {
+            this.txtSuryo.value = "";
             return;
         }
 
         //数字チェック
-        //20180912 ANHLD EDIT START
-        //if (this.isNumber(this.txtSuryo) == false) {
-        //    this.txtSuryo = "";
-        //    return;
-        //}
-
-        if (this.isNumber(this.txtSuryoInput.value) == false) {
-            this.txtSuryoInput.value = "";
+        if (this.isNumber(this.txtSuryo.value) == false) {
+            this.txtSuryo.value = "";
             return;
         }
-        //20180912 ANHLD EDIT END
 
         this.GLOBAL_INPUT_FLG.Global_inputflg = this.GLOBAL_INPUT_FLG.Global_nextflg;
-        this.In_Menu();
+        this.Out_Menu();
     }
     //*********************************************************
     //* 入力チェック
     //*********************************************************
-    In_txtSuryo_InputCheck() {
+    txtSuryo_InputCheck() {
         var ret = false;
 
         //桁数チェック
-        //20180912 ANHLD EDIT START
-        //if (this.txtSuryo.length == 0 || this.txtSuryo.length > 10) {
-        //    //NG
-        //    return ret;
-        //}
-
-        if (this.txtSuryoInput.value.length == 0 || this.txtSuryoInput.value.length > 10) {
+        if (this.txtSuryo.value.length == 0 || this.txtSuryo.value.length > 10) {
             //NG
             return ret;
         }
-        //20180912 ANHLD EDIT END
 
         //OK
         ret = true;
@@ -485,71 +399,53 @@ export class SyukoPage {
     //********************************************************************************
     async In_WriteLog() {
         //通信
-        //20180926 ANHLD ADD START
         var ret = await this.Write_Trans();
 
         if (ret == -1) {
             IsDispOperation.IsWaitMsgBoxMoment(this.toastCtrl, "エラー", 'bottom', 1000);
             return;
         }
-        //20180926 ANHLD ADD START
 
         //メッセージ
         IsDispOperation.IsWaitMsgBoxMoment(this.toastCtrl, "登録されました", 'bottom', 1000);
 
-        //20180912 ANHLD EDIT START
-        //this.txtHinban = "";
-        //this.txtSuryo = "";
-
-        this.txtHinbanInput.value = "";
-        this.txtSuryoInput.value = "";
+        this.txtHinban.value = "";
+        this.txtSuryo.value = "";
         this.lblHinmei = "";
         this.isHinmeiHidden = true;
-        //20180912 ANHLD EDIT END
 
-        //20180926 ANHLD ADD END
         this.GLOBAL_INPUT_FLG.Global_inputflg = this.GLOBAL_INPUT_FLG.Global_nextflg;
-        this.In_Menu();
-        //20180926 ANHLD ADD START
+        this.Out_Menu();
     }
 
     //********************************************************************************
     //確定ボタン
     //********************************************************************************
-    async cmdRegist_Click(event:any) //20180912 ANHLD EDIT [add -> (async)]
+    async cmdRegist_Click(event:any)
     {
         //入力チェック
 
         //棚番 -------------------------------------------------------------
-        if (this.In_txtTanaban_InputCheck() == false) {
-            //20180912 ANHLD EDIT START
-            //IsDispOperation.IsMessageBox(this.alertCtrl, "棚番の桁数が不正です", "エラー", "OK", "");
+        if (this.txtTanaban_InputCheck() == false) {
             await IsDispOperation.IsMessageBox(this.alertCtrl, "棚番の桁数が不正です", "エラー", "OK", "");
-            await IsDispOperation.isSetFocus(this.txtTanabanInput, Keyboard);
-            //20180912 ANHLD EDIT END
+            await IsDispOperation.isSetFocus(this.txtTanaban, Keyboard);
 
             return;
         }
         //棚番 -------------------------------------------------------------
 
         //品番 -------------------------------------------------------------
-        if (this.In_txtHinban_InputCheck() == false) {
-            //20180912 ANHLD EDIT START
-            //IsDispOperation.IsMessageBox(this.alertCtrl, "品番の桁数が不正です", "エラー", "OK", "");
+        if (this.txtHinban_InputCheck() == false) {
             await IsDispOperation.IsMessageBox(this.alertCtrl, "品番の桁数が不正です", "エラー", "OK", "");
-            await IsDispOperation.isSetFocus(this.txtHinbanInput);
-            //20180912 ANHLD EDIT END
+            await IsDispOperation.isSetFocus(this.txtHinban);
             return;
         }
         //品番 -------------------------------------------------------------
 
         //数量 -------------------------------------------------------------
-        if (this.In_txtSuryo_InputCheck() == false) {
-            //20180912 ANHLD EDIT START
-            //IsDispOperation.IsMessageBox(this.alertCtrl, "数量の桁数が不正です", "エラー", "OK", "");
+        if (this.txtSuryo_InputCheck() == false) {
             await IsDispOperation.IsMessageBox(this.alertCtrl, "数量の桁数が不正です", "エラー", "OK", "");
-            await IsDispOperation.isSetFocus(this.txtSuryoInput);
-            //20180912 ANHLD EDIT END
+            await IsDispOperation.isSetFocus(this.txtSuryo);
             return;
         }
         //数量 -------------------------------------------------------------
@@ -561,21 +457,6 @@ export class SyukoPage {
 
         //確定
         this.In_WriteLog();
-    }
-
-    //20180926 ANHLD ADD START
-    //********************************************************************************
-    //
-    //********************************************************************************
-    fnc_DirSep_Add(path: string): string {
-        var res = "";
-        res = path;
-
-        if (res.lastIndexOf('/') != res.length - 1) {
-            res = res + '/';
-        }
-
-        return res;
     }
 
     //********************************************************************************
@@ -593,9 +474,9 @@ export class SyukoPage {
         //Check URI is empty
         if (apiUri == null || apiUri == "") return;
 
-        apiUri = this.fnc_DirSep_Add(apiUri);
+        apiUri = IsStrOperation.fnc_DirSep_Add(apiUri);
         apiUri += 'loca-req' + '?';
-        apiUri += 'T_LOCATION_ID=' + this.txtTanabanInput.value;
+        apiUri += 'T_LOCATION_ID=' + this.txtTanaban.value;
 
         //Set header
         headersReq = new Headers({
@@ -632,9 +513,9 @@ export class SyukoPage {
         //Check URI is empty
         if (apiUri == null || apiUri == "") return;
 
-        apiUri = this.fnc_DirSep_Add(apiUri);
+        apiUri = IsStrOperation.fnc_DirSep_Add(apiUri);
         apiUri += 'item-req' + '?';
-        apiUri += 'T_FIELD1=' + this.txtHinbanInput.value;
+        apiUri += 'T_FIELD1=' + this.txtHinban.value;
 
         //Set header
         headersReq = new Headers({
@@ -669,13 +550,13 @@ export class SyukoPage {
         //Check URI is empty
         if (apiUri == null || apiUri == "") return;
 
-        apiUri = this.fnc_DirSep_Add(apiUri);
+        apiUri = IsStrOperation.fnc_DirSep_Add(apiUri);
         apiUri += 'dcmp-cmp' + '?';
         apiUri += 'T_MODE=' + Global.g_mode;
         apiUri += '&T_PIC=' + Global.g_Tanto;
-        apiUri += '&T_LOCATION_ID=' + this.txtTanabanInput.value;
-        apiUri += '&T_FIELD1=' + this.txtHinbanInput.value;
-        apiUri += '&T_VALUE=' + this.txtSuryoInput.value;
+        apiUri += '&T_LOCATION_ID=' + this.txtTanaban.value;
+        apiUri += '&T_FIELD1=' + this.txtHinban.value;
+        apiUri += '&T_VALUE=' + this.txtSuryo.value;
     
         return new Promise((resolve, reject) => {
             this.http.put(apiUri, null)
@@ -692,5 +573,4 @@ export class SyukoPage {
                 });
         });        
     }
-    //20180926 ANHLD ADD END
 }

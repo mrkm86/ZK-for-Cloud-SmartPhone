@@ -1,4 +1,4 @@
-export class IsEnmtOperation {
+export class IsStrOperation {
 
     static fnc_DirSep_Add(path: string): string {
         var res = "";
@@ -9,4 +9,5 @@ export class IsEnmtOperation {
         }
         return res;
     }
+    
 }

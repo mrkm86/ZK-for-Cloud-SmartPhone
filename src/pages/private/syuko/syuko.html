@@ -17,8 +17,8 @@
                 <!--テキストボックス-->
                 <ion-item>
                     <ion-label stacked>棚番</ion-label>
-                    <ion-input #txtTanaban
-                               name="txtTanaban"
+                    <ion-input #inputTanaban
+                               name="inputTanaban"
                                type="text"
                                maxlength="32"
                                (focus)="txtTanaban_GotFocus()"
@@ -51,8 +51,8 @@
                 <!--テキストボックス-->
                 <ion-item>
                     <ion-label stacked>品番</ion-label>
-                    <ion-input #txtHinban
-                               name="txtHinban"
+                    <ion-input #inputHinban
+                               name="inputHinban"
                                type="text"
                                maxlength="7089"
                                (focus)="txtHinban_GotFocus()"
@@ -85,8 +85,8 @@
                 <!--テキストボックス-->
                 <ion-item>
                     <ion-label stacked>数量</ion-label>
-                    <ion-input #txtSuryo
-                               name="txtSuryo"
+                    <ion-input #inputSuryo
+                               name="inputSuryo"
                                type="number"
                                maxlength="10"
                                (focus)="txtSuryo_GotFocus()">
@@ -98,7 +98,7 @@
                     <!--スキャン不要-->
                     <!--<button ion-button icon-only
                         item-content class="button-scan"
-                        (click)="Scanner_OnScanned('txtHinban')">
+                        (click)="Scanner_OnScanned($event)">
                         <ion-icon name="md-qr-scanner"></ion-icon>
                     </button>-->
                 </ion-item>
