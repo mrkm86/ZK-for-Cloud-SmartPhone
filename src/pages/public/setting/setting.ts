@@ -1,18 +1,23 @@
+//プラグイン/モジュールなど ---------------------------------------------------------
 import { Component, ViewChild } from '@angular/core';
-import { NavController, TextInput, Button, App } from 'ionic-angular';
-import { BarcodeScanner } from '@ionic-native/barcode-scanner'; //20180904 ANHLD ADD
-import { SQLite } from "ionic-native";
+import { NavController, TextInput, AlertController} from 'ionic-angular';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { IsIniOperation } from '../../../inc/IsIniOperation';
+import { Http, Headers, RequestOptions } from '@angular/http';
+
+//HEARTIS関数 -----------------------------------------------------------------------
 import { Global } from '../../../inc/Global';
-import { Http, Headers, RequestOptions, Jsonp } from '@angular/http';
-import { MyApp } from '../../../app/app.component';
-import { Nav, Platform } from 'ionic-angular';
+import { IsDispOperation } from '../../../inc/IsDispOperation';
+import { IsStrOperation } from '../../../inc/IsStrOperation';
 
 @Component({
     selector: 'page-setting',
     templateUrl: 'setting.html'
 })
 export class SettingPage {
+    //********************************************************************************
+    //型宣言
+    //********************************************************************************
 
     //処理の流れ用フラグ
     GLOBAL_INPUT_FLG =
@@ -21,63 +26,85 @@ export class SettingPage {
         };
 
     //タッチパネル対策で、画面遷移IDを設定する
-    SETTING_MENU_ID =
+    MENU_ID =
         {
             "input_flg_Url": 0,
             "input_flg_User": 10,
             "input_flg_Password": 20,
         };
 
-    checkLogin: boolean = false;
     barcodeData: string;
-    @ViewChild(Nav) nav: Nav;
-    @ViewChild('txtUrl') txtUrlInput: TextInput;
-    @ViewChild('txtLoginUser') txtLoginUserInput: TextInput;
-    @ViewChild('txtLoginPassword') txtLoginPasswordInput: TextInput;
+    @ViewChild('txtUrlInput') txtUrl: TextInput;
+    @ViewChild('txtLoginUserInput') txtLoginUser: TextInput;
+    @ViewChild('txtLoginPasswordInput') txtLoginPassword: TextInput;
 
     constructor(
         public navCtrl: NavController,
+        public alertCtrl: AlertController,
         public barcodeScanner: BarcodeScanner,
         public http: Http, ) {
     }
 
+    //********************************************************************************
+    //ページ読み込み時
+    //********************************************************************************
     async ionViewWillEnter() {
-        //20180924 ANHLD EDIT START
-        //this.txtUrlInput.value = '';
 
         //Read value
-        this.txtUrlInput.value = await IsIniOperation.IsIniRead(Global.T_SETINI, 'API_URL');
-        //20180924 ANHLD EDIT END
-        this.txtLoginUserInput.value = await IsIniOperation.IsIniRead(Global.T_SETINI, 'LOGIN_USER');
-        this.txtLoginPasswordInput.value = await IsIniOperation.IsIniRead(Global.T_SETINI, 'PASSWORD');
+        this.txtUrl.value = await IsIniOperation.IsIniRead(Global.T_SETINI, 'API_URL');
+        this.txtLoginUser.value = await IsIniOperation.IsIniRead(Global.T_SETINI, 'LOGIN_USER');
+        this.txtLoginPassword.value = await IsIniOperation.IsIniRead(Global.T_SETINI, 'PASSWORD');
     }
 
-    ionViewWillLeave() {
+    //********************************************************************************
+    //ページクローズ時
+    //********************************************************************************
+    async ionViewWillLeave() {
+        var itemJson = null;
 
-        if (this.txtUrlInput.value == '' || this.txtLoginUserInput.value == '' || this.txtLoginPasswordInput.value == '') {
+        if (this.txtUrl.value == '' || this.txtLoginUser.value == '' || this.txtLoginPassword.value == '') {
             return;
         }
       
-        //Write value        
-        IsIniOperation.IsIniWrite(Global.T_SETINI, 'API_URL', this.txtUrlInput.value)
+        //Trans data
+        itemJson = await this.TransSignIn();
+
+        if (itemJson == null || itemJson.length == 0) {
+            await IsDispOperation.IsMessageBox(this.alertCtrl, "ログインできませんでした", "エラー", "OK", "");
+            return;
+        }
+        else
+        {
+            await IsIniOperation.IsIniWrite(Global.T_SETINI, 'API_URL', this.txtUrl.value)
             .then(() => {
-                this.SignIn();
+                IsIniOperation.IsIniWrite(Global.T_SETINI, 'LOGIN_USER', this.txtLoginUser.value);
             })
+            .then(() => {
+                IsIniOperation.IsIniWrite(Global.T_SETINI, 'PASSWORD', this.txtLoginPassword.value);
+            })
+            .then(() => {
+                //担当者コード
+                Global.g_Tanto = this.txtLoginUser.value;
+            });
+        }
     }
 
+    //********************************************************************************
+    //スキャナーイベント
+    //********************************************************************************
     Scanner_OnScanned(event: any) {
         var ctrl = event.currentTarget.getAttribute("name");
 
         //どのスキャンボタンを押されたかによって、処理を分ける
         switch (ctrl) {
             case "btnInputUrl":
-                this.GLOBAL_INPUT_FLG.Global_inputflg = this.SETTING_MENU_ID.input_flg_Url;
+                this.GLOBAL_INPUT_FLG.Global_inputflg = this.MENU_ID.input_flg_Url;
                 break;
             case "btnInputUser":
-                this.GLOBAL_INPUT_FLG.Global_inputflg = this.SETTING_MENU_ID.input_flg_User;
+                this.GLOBAL_INPUT_FLG.Global_inputflg = this.MENU_ID.input_flg_User;
                 break;
             case "btnInputPassword":
-                this.GLOBAL_INPUT_FLG.Global_inputflg = this.SETTING_MENU_ID.input_flg_Password;
+                this.GLOBAL_INPUT_FLG.Global_inputflg = this.MENU_ID.input_flg_Password;
                 break;
         }
 
@@ -88,18 +115,18 @@ export class SettingPage {
 
             switch (this.GLOBAL_INPUT_FLG.Global_inputflg) {
                 //Api-url
-                case this.SETTING_MENU_ID.input_flg_Url:
-                    this.txtUrlInput.value = data.text
+                case this.MENU_ID.input_flg_Url:
+                    this.txtUrl.value = data.text
                     break;
 
                 //Username
-                case this.SETTING_MENU_ID.input_flg_User:
-                    this.txtLoginUserInput.value = data.text
+                case this.MENU_ID.input_flg_User:
+                    this.txtLoginUser.value = data.text
                     break;
 
                 //Password
-                case this.SETTING_MENU_ID.input_flg_Password:
-                    this.txtLoginPasswordInput.value = data.text
+                case this.MENU_ID.input_flg_Password:
+                    this.txtLoginPassword.value = data.text
                     break;
 
                 default:
@@ -110,55 +137,30 @@ export class SettingPage {
         });
     }
 
-    async SignIn() {
+    async TransSignIn() : Promise<any> {
         var apiUri = null;
-        var headersReq = null;
-        var options = null;
 
         //Set URL
-        //apiUri = 'https://hsccloud-a522913.db.us2.oraclecloudapps.com/apex/hscdevelop/zaiko/api/tnto-req2?';
-        apiUri = await IsIniOperation.IsIniRead(Global.T_SETINI, 'API_URL');
+        apiUri = this.txtUrl.value;
 
         //Check URI is empty
         if (apiUri == null || apiUri == "") return;
 
-        if (apiUri.lastIndexOf('/') != apiUri.length - 1) {
-            apiUri = apiUri + '/';
-        }
-
+        apiUri = IsStrOperation.fnc_DirSep_Add(apiUri);
         apiUri += 'tnto-req2' + '?';
+        apiUri += 'T_PIC=' + this.txtLoginUser.value;
+        apiUri += '&T_PASSWORD=' + this.txtLoginPassword.value;
 
-        apiUri += 'T_PIC=' + this.txtLoginUserInput.value;
-        apiUri += '&T_PASSWORD=' + this.txtLoginPasswordInput.value;
+        return new Promise((resolve, reject) => {
+            this.http.get(apiUri, null)
+                .subscribe((data) => {
+                    var jsonItem = JSON.parse(data['_body'])
+                    resolve(jsonItem['items']);
 
-        //Set header
-        headersReq = new Headers({
-            'Content-Type': 'application/json'
-        });
-
-        options = new RequestOptions({ headers: headersReq });
-
-        this.http.get(apiUri, options)
-            .subscribe(async data => {
-                try {
-                    var jsonItem = JSON.parse(data['_body']);
-
-                    if (jsonItem['items'] != null && jsonItem['items'].length > 0) {
-
-                        await IsIniOperation.IsIniWrite(Global.T_SETINI, 'LOGIN_USER', this.txtLoginUserInput.value);
-                        await IsIniOperation.IsIniWrite(Global.T_SETINI, 'PASSWORD', this.txtLoginPasswordInput.value);
-                        Global.g_Tanto = this.txtLoginUserInput.value;
-                        //alert('完了しました！');
-                    }
-                } catch (error) {
+                }, (error) => {
                     alert('エラー' + '\n' + error);
-                }
-
-            }, error => {
-                alert('エラー' + '\n' + error);
-            });
+                    resolve(null);
+                });
+        }); 
     }
-
-
-
 }

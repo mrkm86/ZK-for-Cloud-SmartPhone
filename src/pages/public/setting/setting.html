@@ -18,7 +18,7 @@
                     <ion-row>
                         <ion-item>
                             <ion-label stacked>API Service URL</ion-label>
-                            <ion-input name="txtUrl" type="text" #txtUrl placeholder="https://"></ion-input>
+                            <ion-input #txtUrlInput name="txtUrlInput" type="text" placeholder="https://"></ion-input>
                         </ion-item>
                         <ion-item no-lines class="item-button-scan">
                             <ion-label stacked></ion-label>
@@ -39,7 +39,7 @@
                         <!--テキストボックス-->
                         <ion-item>
                             <ion-label stacked></ion-label>
-                            <ion-input #txtLoginUser name="txtLoginUser" type="text" placeholder="userid"></ion-input>
+                            <ion-input #txtLoginUserInput name="txtLoginUserInput" type="text" placeholder="userid"></ion-input>
                         </ion-item>
                         <!--スキャンボタン-->
                         <ion-item no-lines class="item-button-scan">
@@ -57,7 +57,7 @@
                         <!--テキストボックス-->
                         <ion-item>
                             <ion-label stacked></ion-label>
-                            <ion-input #txtLoginPassword name="txtLoginPassword" type="text" placeholder="password"></ion-input>
+                            <ion-input #txtLoginPasswordInput name="txtLoginPasswordInput" type="password" placeholder="password"></ion-input>
                         </ion-item>
                         <!--スキャンボタン-->
                         <ion-item no-lines class="item-button-scan">
@@ -71,6 +71,7 @@
                 </ion-grid>
             </div>
         </div>
+        
         <div class="page-setting-about">
             <h2 class="center">バージョン情報</h2>
             <!--システム概要-->

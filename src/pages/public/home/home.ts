@@ -3,15 +3,15 @@ import { Component } from '@angular/core';
 import { NavController, AlertController } from 'ionic-angular';
 
 //HEARTIS関数 -----------------------------------------------------------------------
+import { Global } from '../../../inc/Global';
 import { IsDispOperation } from '../../../inc/IsDispOperation';
+import { IsIniOperation } from '../../../inc/IsIniOperation';
 
 //共通ページ ------------------------------------------------------------------------
 
 //個別ページ ------------------------------------------------------------------------
 import { NyukoPage } from '../../private/nyuko/nyuko';
 import { SyukoPage } from '../../private/syuko/syuko';
-import { IsIniOperation } from '../../../inc/IsIniOperation';
-import { Global } from '../../../inc/Global';
 
 @Component({
     selector: 'page-home',

@@ -7,9 +7,9 @@ import { Keyboard } from 'ionic-native';
 import { Http, Headers, RequestOptions, Jsonp } from '@angular/http';
 
 //HEARTIS関数 -----------------------------------------------------------------------
+import { Global } from '../../../inc/Global';
 import { IsDispOperation } from '../../../inc/IsDispOperation';
 import { IsIniOperation } from '../../../inc/IsIniOperation';
-import { Global } from '../../../inc/Global';
 import { IsStrOperation } from '../../../inc/IsStrOperation';
 
 @Component({
@@ -293,7 +293,6 @@ export class SyukoPage {
         itemJson = await this.TransHinban();
 
         if (itemJson == null || itemJson.length == 0) {
-            console.log('111');
             IsDispOperation.IsWaitMessageBox(this.loadingCtrl, "データ送信中", false);
             await IsDispOperation.IsMessageBox(this.alertCtrl, "該当しない品番です", "エラー", "OK", "");
             await IsDispOperation.isSetFocus(this.txtHinban);
