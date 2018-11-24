@@ -1,1 +1,0 @@
-{"plugins":["cordova-plugin-whitelist","cordova-plugin-console","cordova-plugin-statusbar","cordova-plugin-device","cordova-plugin-splashscreen","cordova-plugin-android-permissions","cordova-plugin-vibration","phonegap-plugin-barcodescanner","cordova-plugin-compat","cordova-sqlite-storage","ionic-plugin-keyboard"]}
