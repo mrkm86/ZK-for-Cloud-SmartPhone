@@ -1,7 +1,7 @@
-.DS_Store
-.sourcemaps
-.vs
-.vscode
+/.DS_Store/
+/.sourcemaps/
+/.vs/
+/.vscode/
 node_modules
 platforms
 plugins
