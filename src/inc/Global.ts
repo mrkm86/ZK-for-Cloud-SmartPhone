@@ -2,7 +2,6 @@ export class Global {
     static SETDB: string = "SET.db";
     static T_SETINI: string = "T_SETINI";
     static g_Tanto: string = "";
-    static g_mode: string = "";
     static CurrentControl = null;
 
     //取得情報格納変数

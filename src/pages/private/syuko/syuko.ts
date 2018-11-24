@@ -550,7 +550,7 @@ export class SyukoPage {
 
         apiUri = IsStrOperation.fnc_DirSep_Add(apiUri);
         apiUri += 'dcmp-cmp' + '?';
-        apiUri += 'T_MODE=' + Global.g_mode;
+        apiUri += 'T_MODE=' + '2';
         apiUri += '&T_PIC=' + Global.g_Tanto;
         apiUri += '&T_LOCATION_ID=' + this.txtTanaban.value;
         apiUri += '&T_FIELD1=' + this.txtHinban.value;

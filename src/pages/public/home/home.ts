@@ -65,7 +65,6 @@ export class HomePage {
                 }
 
                 Global.g_Tanto = this.loginUser;
-                Global.g_mode = "1";
                 this.navCtrl.push(NyukoPage, { index: val });
                 break;
 
@@ -80,7 +79,6 @@ export class HomePage {
                 }
 
                 Global.g_Tanto = this.loginUser;
-                Global.g_mode = "2";
                 this.navCtrl.push(SyukoPage, { index: val });
                 break;
 
